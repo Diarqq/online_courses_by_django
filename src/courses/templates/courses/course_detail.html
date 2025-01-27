@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}Course Detail{% endblock %}
+
+{% block content %}
+<h1>Course Detail</h1>
+<h2>{{ course.title }}</h2>
+<p>{{ course.description }}</p>
+<a href="{% url 'course_update' course.id %}">Edit</a>
+<a href="{% url 'course_delete' course.id %}">Delete</a>
+<a href="{% url 'course_list' %}">Back to Course List</a>
+
+<h2>Course Parts</h2>
+<a href="{% url 'coursepart_create_with_course' course.id %}">Add New Course Part</a>
+<ul>
+    {% for coursepart in course_parts %}
+        <li>
+            <h3>{{ coursepart.title }} - {{ coursepart.description }}</h3>
+            <a href="{% url 'coursepart_update' coursepart.id %}">Edit</a>
+            <a href="{% url 'coursepart_delete' coursepart.id %}">Delete</a>
+            <h4>Topics</h4>
+            <a href="{% url 'coursetopic_create_with_coursepart' coursepart.id %}">Add New Topic</a>
+            <ul>
+                {% for topic in coursepart.prefetched_topics %}
+                    <li>
+                        {{ topic.title }} - {{ topic.description }}
+                        <a href="{% url 'coursetopic_update' topic.id %}">Edit</a>
+                        <a href="{% url 'coursetopic_delete' topic.id %}">Delete</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}

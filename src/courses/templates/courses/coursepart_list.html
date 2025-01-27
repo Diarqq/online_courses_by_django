@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Course Part List{% endblock %}
+{% block content %}
+<h1>Course Part List</h1>
+<a href="{% url 'coursepart_create' %}">Create New Course Part</a>
+<ul>
+    {% for coursepart in coursepart_list %}
+        <li>
+            {{ coursepart.title }} - {{ coursepart.description }}
+            <a href="{% url 'coursepart_detail' coursepart.id %}">View</a>
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}

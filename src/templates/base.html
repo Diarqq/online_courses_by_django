@@ -1,0 +1,39 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Online Courses{% endblock %}</title>
+</head>
+<body>
+    <header>
+        <nav>
+                {% if user.is_authenticated %}
+                <ul>
+                    <li><a href="{% url 'course_list' %}">Courses</a></li>
+                    <li><a href="{% url 'coursepart_list' %}">Course Parts</a></li>
+                    <li><a href="{% url 'coursetopic_list' %}">Course Topics</a></li>
+                    <li><a href="{% url 'document_list' %}">Course Documents</a></li>
+                </ul>
+                    <h3>Hello {{user.username}}</h3>
+                    <form method="post" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                    <button type="submit">logout</button>
+                    </form>
+                {% else %}
+                <ui>
+                    <li><a href="{% url 'login' %}">Login</a></li>
+                    <li><a href="{% url 'register' %}">Register</a></li>
+                </ui>
+                {% endif %}
+        </nav>
+    </header>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+    <footer>
+        <p>&copy; 2024 Online Courses. All rights reserved.</p>
+    </footer>
+</body>

@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title %}Confirm Course Topic Detail{% endblock %}
+
+{% block content %}
+<h1>Course Topic Detail</h1>
+<h2>{{ coursetopic.title }}</h2>
+<p>{{ coursetopic.description }}</p>
+<a href="{% url 'coursetopic_update' coursetopic.id %}">Edit</a>
+<a href="{% url 'coursetopic_delete' coursetopic.id %}">Delete</a>
+<a href="{% url 'coursetopic_list' %}">Back to Course Topic List</a>
+{% endblock %}

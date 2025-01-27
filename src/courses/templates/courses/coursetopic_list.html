@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Course Topic List{% endblock %}
+{% block content %}
+<h1>Course Topic List</h1>
+<a href="{% url 'coursetopic_create' %}">Create New Course Topic</a>
+<ul>
+    {% for coursetopic in coursetopic_list %}
+        <li>
+            {{ coursetopic.title }} - {{ coursetopic.content }}
+            <a href="{% url 'coursetopic_detail' coursetopic.id %}">View</a>
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block title %}Confirm Course Part Detail{% endblock %}
+
+{% block content %}
+<h1>Course Part Detail</h1>
+<h2>{{ coursepart.title }}</h2>
+<p>{{ coursepart.description }}</p>
+<a href="{% url 'coursepart_update' coursepart.id %}">Edit</a>
+<a href="{% url 'coursepart_delete' coursepart.id %}">Delete</a>
+<a href="{% url 'coursetopic_list' %}?coursepart={{ coursepart.id }}">View Topics</a>
+<a href="{% url 'coursepart_list' %}">Back to Course Part List</a>
+{% endblock %}

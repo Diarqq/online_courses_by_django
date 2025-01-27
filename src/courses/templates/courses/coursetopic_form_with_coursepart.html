@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Create Course Topic{% endblock %}
+{% block content %}
+<h1>Create Course Topic</h1>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Save</button>
+</form>
+<a href="{% url 'course_detail' pk=part_id %}">Back to Course Detail</a>
+{% endblock %}
