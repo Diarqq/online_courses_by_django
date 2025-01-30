@@ -1,8 +1,4 @@
-from django.contrib.auth.models import Group
-from django.urls import reverse_lazy
-from django.views.generic.edit import FormView
-from django.contrib import messages
-from .forms import CustomUserCreationForm
+
 
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
@@ -15,11 +11,11 @@ def register_view(request):
         if form.is_valid():
             user = form.save()
             login(request,user)
-            return redirect('main page')
+            return redirect('course_list')
 
-        else:
-            form = CustomUserCreationForm()
-            return render(request,'register.html',{'form':form})
+    else:
+        form = CustomUserCreationForm
+        return render(request,'registration/register.html',{'form':form})
 
 
 def login_view(request):
@@ -31,7 +27,7 @@ def login_view(request):
             user = authenticate(username=username, password=password) # Проверяем учетные данные
             if user is not None:
                 login(request, user)     # Выполняем вход
-                return redirect('home')  # Перенаправляем на главную страницу
+                return redirect('course_list')  # Перенаправляем на главную страницу
     return render(request, 'login.html', {'form': form})
 
 

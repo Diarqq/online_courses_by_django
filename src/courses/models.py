@@ -36,3 +36,60 @@ class Course(BaseModel):
     class Meta:
         verbose_name = 'Курс'
         verbose_name_plural = 'Курсы'
+
+
+#NOT MINE > REWORK
+
+class CoursePart(BaseModel):
+    course = models.ForeignKey(Course, related_name='parts', on_delete=models.CASCADE)
+    title = models.CharField(max_length=255)
+
+    @property
+    def topic_count(self):
+        return self.topics.count()
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['course', 'title'],
+                condition=models.Q(deleted_at__isnull=True),
+                name='unique_course_part'
+            )
+        ]
+
+    def __str__(self):
+        return f"{self.course.title}-{self.title}"
+
+
+class CourseTopic(BaseModel):
+    part =  models.ForeignKey(CoursePart, related_name='topics', on_delete=models.CASCADE)
+    title = models.CharField(max_length=255)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['part', 'title'],
+                condition=models.Q(deleted_at__isnull=True),
+                name='unique_course_topic'
+            )
+        ]
+
+    def __str__(self):
+        return f"{self.part.title}-{self.title}"
+
+
+class TopicDocument(BaseModel):
+    topic = models.ForeignKey(CourseTopic, related_name='documents', on_delete=models.CASCADE)
+    name = models.CharField(max_length=255)
+    file = models.FileField(upload_to='topic_documents/')
+
+    def __str__(self):
+        return self.name
+
+
+class TopicText(BaseModel):
+    topic = models.ForeignKey(CourseTopic, related_name='texts', on_delete=models.CASCADE)
+    text = models.TextField()
+
+    def __str__(self):
+        return f"Text for {self.topic.title}"
