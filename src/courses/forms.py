@@ -23,6 +23,12 @@ class CoursePartForm(forms.ModelForm):
     class Meta:
         model = CoursePart
         fields = ['course', 'title']
+        labels={
+            'title': 'Назва',
+            'course':'Курс',
+        }
+
+
 
 
 class CourseTopicForm(forms.ModelForm):
@@ -35,6 +41,10 @@ class CourseTopicForm(forms.ModelForm):
     class Meta:
         model = CourseTopic
         fields = ['part', 'title', ]
+        labels={
+            'title': 'Назва',
+            'part':'Частка',
+        }
 
 
 class TopicDocumentForm(forms.ModelForm):
@@ -47,3 +57,6 @@ class TopicDocumentForm(forms.ModelForm):
     class Meta:
         model = TopicDocument
         fields = ['name', 'file', 'topic']
+        labels={
+            'name':'Імя', 'file':'Файл', 'topic':'Топік',
+        }

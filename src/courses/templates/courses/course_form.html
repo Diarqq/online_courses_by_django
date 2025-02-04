@@ -2,7 +2,6 @@
 {% block title %}Create/Update Course{% endblock %}
 {% block content %}
 <h1>{{ view.title }}</h1>
-<h1>{{ test }}</h1>
 <form method="post">
   {% csrf_token %} {{ form.as_p }}
   <button type="submit">Save</button>
