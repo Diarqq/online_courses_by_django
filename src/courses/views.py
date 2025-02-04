@@ -45,6 +45,8 @@ def course_update_view(request,pk):
             form.save()
         return redirect('course_detail',pk)
 
+    #THANKS FOR A HELP
+
 def course_delete_view(request):
     pass
 
