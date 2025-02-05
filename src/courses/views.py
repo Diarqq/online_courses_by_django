@@ -35,17 +35,17 @@ def course_update_view(request,pk):
     course = get_object_or_404(Course,id=pk)
     if request.method == "GET":
         print('GET '*7)
-        form = CourseCreateForm(initial={'course':course,'title':course.title,'description':course.description})
+        form = CourseCreateForm(instance=course)
         return render(request, 'courses/course_form.html', {'form': form})
     elif request.method == 'POST':
         print('Post ' * 7)
-        form = CourseCreateForm(request.POST)
+        form = CourseCreateForm(request.POST,instance=course)
         if form.is_valid():
             print('IS VALID '*7)
             form.save()
         return redirect('course_detail',pk)
 
-    #THANKS FOR A HELP
+
 
 def course_delete_view(request):
     pass
