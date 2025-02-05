@@ -80,8 +80,8 @@ def course_part_create_view(request):
 def course_part_create_with_course_view(request,course_id):
     course = get_object_or_404(Course,id=course_id)
     if request.method == 'GET':
-        form = CoursePartForm(initial={'course':course})
-        return render(request, 'courses/coursepart_form.html', {'form': form})
+        form = CoursePartForm(instance=course)
+        return render(request, 'courses/coursepart_form_with_course.html', {'form': form,'course_id':course_id})
     elif request.method == 'POST':
         form = CoursePartForm(request.POST)
         if form.is_valid():
