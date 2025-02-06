@@ -112,10 +112,21 @@ def course_part_delete_view(request):
 def course_topic_list_view(request):
     coursetopics = CourseTopic.objects.all()
     return render(request,'courses/coursetopic_list.html',{'coursetopic_list':coursetopics})
-def course_topic_detail_view(request):
-    pass
-def course_topic_create_with_course_part_view(request):
-    pass
+def course_topic_detail_view(request,pk):
+    if request.method == 'GET':
+        coursetopic = CourseTopic.objects.get(id=pk)
+        return render(request, 'courses/coursetopic_detail.html', {'coursetopic': coursetopic})
+def course_topic_create_with_course_part_view(request,part_id):
+    coursepart = get_object_or_404(CoursePart, id=part_id)
+    if request.method == 'GET':
+        form = CourseTopicForm(initial={'part':coursepart})
+        return render(request, 'courses/coursetopic_form.html', {'form': form})
+    elif request.method == 'POST':
+        form = CourseTopicForm(request.POST,initial={'part':coursepart})
+        if form.is_valid():
+            print('q')
+            form.save()
+        return redirect('coursetopic_list')
 def course_topic_create_view(request):
     if request.method == 'GET':
         form = CourseTopicForm()

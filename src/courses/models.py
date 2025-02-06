@@ -65,6 +65,7 @@ class CoursePart(BaseModel):
 class CourseTopic(BaseModel):
     part =  models.ForeignKey(CoursePart, related_name='topics', on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
+    description = models.TextField(default=None)
 
     class Meta:
         constraints = [

@@ -41,10 +41,11 @@ class CourseTopicForm(forms.ModelForm):
 
     class Meta:
         model = CourseTopic
-        fields = ['part', 'title', ]
+        fields = ['part', 'title','description']
         labels={
             'title': 'Назва',
             'part':'Частка',
+            'description': 'Апісанне',
         }
 
 
