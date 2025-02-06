@@ -137,8 +137,17 @@ def course_topic_create_view(request):
             print('q')
             form.save()
         return redirect('coursetopic_list')
-def course_topic_update_view(request):
-    pass
+def course_topic_update_view(request,pk):
+    coursetopic = get_object_or_404(CourseTopic, id=pk)
+    if request.method == 'GET':
+        form = CourseTopicForm(instance=coursetopic)
+        return render(request, 'courses/coursetopic_form.html', {'form': form})
+    elif request.method == 'POST':
+        form = CourseTopicForm(request.POST,instance=coursetopic)
+        if form.is_valid():
+            print('q')
+            form.save()
+        return redirect('coursetopic_list')
 def course_topic_delete_view(request):
     pass
 
