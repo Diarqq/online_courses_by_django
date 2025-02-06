@@ -22,10 +22,11 @@ class CoursePartForm(forms.ModelForm):
 
     class Meta:
         model = CoursePart
-        fields = ['course', 'title']
+        fields = ['course', 'title','description']
         labels={
             'title': 'Назва',
             'course':'Курс',
+            'description':'Апісанне',
         }
 
 

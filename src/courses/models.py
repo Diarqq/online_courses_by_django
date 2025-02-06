@@ -43,6 +43,7 @@ class Course(BaseModel):
 class CoursePart(BaseModel):
     course = models.ForeignKey(Course, related_name='parts', on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
+    description = models.TextField(default=None)
 
     @property
     def topic_count(self):

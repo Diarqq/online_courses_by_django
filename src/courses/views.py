@@ -87,7 +87,16 @@ def course_part_create_with_course_view(request,course_id):
             form.save()
         return redirect('course_detail',course_id)
 def course_part_update_view(request,pk):
-    pass
+    coursepart = get_object_or_404(CoursePart, id=pk)
+    if request.method == 'GET':
+        form = CoursePartForm(instance=coursepart)
+        return render(request, 'courses/coursepart_form.html', {'form': form})
+    elif request.method == 'POST':
+        form = CoursePartForm(request.POST,instance=coursepart)
+        if form.is_valid():
+            print('q')
+            form.save()
+        return redirect('coursepart_detail', pk)
 def course_part_delete_view(request):
     pass
 
