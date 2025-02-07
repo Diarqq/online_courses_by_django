@@ -35,15 +35,17 @@ def course_update_view(request,pk):
     course = get_object_or_404(Course,id=pk)
     if request.method == "GET":
         print('GET '*7)
-        form = CourseCreateForm(initial={'course':course,'title':course.title,'description':course.description})
+        form = CourseCreateForm(instance=course)
         return render(request, 'courses/course_form.html', {'form': form})
     elif request.method == 'POST':
         print('Post ' * 7)
-        form = CourseCreateForm(request.POST)
+        form = CourseCreateForm(request.POST,instance=course)
         if form.is_valid():
             print('IS VALID '*7)
             form.save()
         return redirect('course_detail',pk)
+
+
 
 def course_delete_view(request):
     pass
@@ -78,8 +80,8 @@ def course_part_create_view(request):
 def course_part_create_with_course_view(request,course_id):
     course = get_object_or_404(Course,id=course_id)
     if request.method == 'GET':
-        form = CoursePartForm(initial={'course':course})
-        return render(request, 'courses/coursepart_form.html', {'form': form})
+        form = CoursePartForm(instance=course)
+        return render(request, 'courses/coursepart_form_with_course.html', {'form': form,'course_id':course_id})
     elif request.method == 'POST':
         form = CoursePartForm(request.POST)
         if form.is_valid():
