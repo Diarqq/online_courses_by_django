@@ -1,0 +1,4 @@
+psycopg2-binary==2.9.10
+SQLAlchemy==2.0.36
+Django==5.1.5
+black==25.1.0
