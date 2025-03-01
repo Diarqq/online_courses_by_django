@@ -3,27 +3,44 @@ from django.contrib.auth.models import User
 from django.utils.timezone import now
 
 
+class SoftDeleteManager(models.Manager):
+    def get_queryset(self):
+        # Исключить записи с `deleted_at` не равным `None`
+        return super().get_queryset().filter(deleted_at__isnull=True)
+
+
 class BaseModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(null=True, blank=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
 
+    # Менеджер для получения только активных записей
+    objects = SoftDeleteManager()
+
+    # Добавить менеджер для получения всех записей (включая удаленные)
+    all_objects = models.Manager()
 
     class Meta:
         abstract = True
-
-
 
     def delete(self, using=None, keep_parents=False):
         # Установить время удаления вместо удаления строки
         self.deleted_at = now()
         self.save()
 
+    def hard_delete(self, using=None, keep_parents=False):
+        # Реальное удаление строки, если необходимо
+        super().delete(using, keep_parents)
+
+    def restore(self):
+        # Восстановление "удаленной" строки
+        self.deleted_at = None
+        self.save()
+
     @property
     def is_deleted(self):
         return self.deleted_at is not None
-
 
 
 class Course(BaseModel):
@@ -34,14 +51,15 @@ class Course(BaseModel):
         return self.title
 
     class Meta:
-        verbose_name = 'Курс'
-        verbose_name_plural = 'Курсы'
+        verbose_name = "Курс"
+        verbose_name_plural = "Курсы"
 
 
-#NOT MINE > REWORK
+# NOT MINE > REWORK
+
 
 class CoursePart(BaseModel):
-    course = models.ForeignKey(Course, related_name='parts', on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, related_name="parts", on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     description = models.TextField(default=None)
 
@@ -52,9 +70,9 @@ class CoursePart(BaseModel):
     class Meta:
         constraints = [
             models.UniqueConstraint(
-                fields=['course', 'title'],
+                fields=["course", "title"],
                 condition=models.Q(deleted_at__isnull=True),
-                name='unique_course_part'
+                name="unique_course_part",
             )
         ]
 
@@ -63,16 +81,16 @@ class CoursePart(BaseModel):
 
 
 class CourseTopic(BaseModel):
-    part =  models.ForeignKey(CoursePart, related_name='topics', on_delete=models.CASCADE)
+    part = models.ForeignKey(CoursePart, related_name="topics", on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     description = models.TextField(default=None)
 
     class Meta:
         constraints = [
             models.UniqueConstraint(
-                fields=['part', 'title'],
+                fields=["part", "title"],
                 condition=models.Q(deleted_at__isnull=True),
-                name='unique_course_topic'
+                name="unique_course_topic",
             )
         ]
 
@@ -81,16 +99,18 @@ class CourseTopic(BaseModel):
 
 
 class TopicDocument(BaseModel):
-    topic = models.ForeignKey(CourseTopic, related_name='documents', on_delete=models.CASCADE)
+    topic = models.ForeignKey(
+        CourseTopic, related_name="documents", on_delete=models.CASCADE
+    )
     name = models.CharField(max_length=255)
-    file = models.FileField(upload_to='topic_documents/')
+    file = models.FileField(upload_to="topic_documents/")
 
     def __str__(self):
         return self.name
 
 
 class TopicText(BaseModel):
-    topic = models.ForeignKey(CourseTopic, related_name='texts', on_delete=models.CASCADE)
+    topic = models.ForeignKey(CourseTopic, related_name="texts", on_delete=models.CASCADE)
     text = models.TextField()
 
     def __str__(self):

@@ -1,38 +1,37 @@
-
-
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from .forms import CustomUserCreationForm, LoginForm
 
 
 def register_view(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            login(request,user)
-        return redirect('course_list')
+            login(request, user)
+        return redirect("course_list")
 
     else:
         form = CustomUserCreationForm
-        return render(request,'registration/register.html',{'form':form})
+        return render(request, "registration/register.html", {"form": form})
 
 
 def login_view(request):
     form = LoginForm(data=request.POST or None)
-    if request.method == 'POST':
+    if request.method == "POST":
         if form.is_valid():
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password']
-            user = authenticate(username=username, password=password) # Проверяем учетные данные
+            username = form.cleaned_data["username"]
+            password = form.cleaned_data["password"]
+            user = authenticate(
+                username=username, password=password
+            )  # Проверяем учетные данные
             if user is not None:
-                login(request, user)     # Выполняем вход
-                return redirect('course_list')  # Перенаправляем на главную страницу
-    return render(request, 'login.html', {'form': form})
+                login(request, user)  # Выполняем вход
+                return redirect("course_list")  # Перенаправляем на главную страницу
+    return render(request, "login.html", {"form": form})
 
 
-
-'''class RegisterView(FormView):
+"""class RegisterView(FormView):
     template_name = 'registration/register.html'
     form_class = CustomUserCreationForm
     success_url = reverse_lazy('login')
@@ -52,4 +51,4 @@ def login_view(request):
             user.groups.add(group)
 
         messages.success(self.request, 'Ypu registered successfully!')
-        return super().form_valid(form)'''
+        return super().form_valid(form)"""
